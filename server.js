@@ -23,7 +23,6 @@ app.post('/add-member', async(req, res) => {
                 attributes: {
                     first_name: req.body.first_name,
                     last_name: req.body.last_name,
-                    email: req.body.email
                 }
             }
         }, {
@@ -34,6 +33,7 @@ app.post('/add-member', async(req, res) => {
         });
         res.json(response.data);
     } catch (error) {
+        console.error('Error adding member:', error.response ? error.response.data : error.message);
         res.status(500).send(error.message);
     }
 });
