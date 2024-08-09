@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Church Member Management</title>
+</head>
+
+<body>
+    <h1>Add New Member</h1>
+    <form id="addMemberForm">
+        <input type="text" name="first_name" placeholder="First Name" required />
+        <input type="text" name="last_name" placeholder="Last Name" required />
+        <input type="email" name="email" placeholder="Email" required />
+        <button type="submit">Add Member</button>
+    </form>
+
+    <h2>Members List</h2>
+    <ul id="membersList"></ul>
+
+    <script>
+        const form = document.getElementById('addMemberForm');
+        form.addEventListener('submit', async(e) => {
+            e.preventDefault();
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData);
+            await fetch('/add-member', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+            // Fetch and display members again
+        });
+
+        async function loadMembers() {
+            const res = await fetch('/get-members');
+            const data = await res.json();
+            const membersList = document.getElementById('membersList');
+            membersList.innerHTML = data.data.map(member => `<li>${member.attributes.first_name} ${member.attributes.last_name}</li>`).join('');
+        }
+
+        loadMembers();
+    </script>
+</body>
+
+</html>
