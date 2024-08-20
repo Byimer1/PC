@@ -4,18 +4,30 @@
 <head>
     <meta charset="UTF-8">
     <title>Church Member Management</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body>
-    <h1>Add New Member</h1>
-    <form id="addMemberForm">
-        <input type="text" name="first_name" placeholder="First Name" required />
-        <input type="text" name="last_name" placeholder="Last Name" required />
-        <button type="submit">Add Member</button>
-    </form>
+    <div class="container mt-5">
+        <h1 class="mb-4">Add New Member</h1>
+        <form id="addMemberForm">
+            <form id="addMemberForm">
+                <div class="form-group">
+                    <label for="first_name">First Name</label>
+                    <input type="text" class="form-control" id="first_name" name="first_name" placeholder="First Name" required>
+                </div>
+                <div class="form-group">
+                    <label for="last_name">Last Name</label>
+                    <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Last Name" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Add Member</button>
+            </form>
+        </form>
 
-    <h2>Members List</h2>
-    <ul id="membersList"></ul>
+        <h2 class="mt-5">Members List</h2>
+        <ul id="membersList" class="list-unstyled"></ul>
+    </div>
 
     <script>
         const form = document.getElementById('addMemberForm');
@@ -38,11 +50,30 @@
             const data = await res.json();
             console.log('Raw Data:', JSON.stringify(data, null, 2));
             const membersList = document.getElementById('membersList');
-            membersList.innerHTML = data.data.map(member => `<li>${member.attributes.first_name} ${member.attributes.last_name}  -  ID: ${member.id} </li>`).join('');
+
+            // Sort members by first name
+            const sortedMembers = data.data.sort((a, b) => {
+                const firstNameA = a.attributes.first_name.toUpperCase(); // ignore upper and lowercase
+                const firstNameB = b.attributes.first_name.toUpperCase(); // ignore upper and lowercase
+                if (firstNameA < firstNameB) {
+                    return -1;
+                }
+                if (firstNameA > firstNameB) {
+                    return 1;
+                }
+
+                // Names must be equal
+                return 0;
+            });
+
+            // Display sorted members
+            membersList.innerHTML = sortedMembers.map(member => `<li>${member.attributes.first_name} ${member.attributes.last_name}  -  ID: ${member.id}</li>`).join('');
         }
 
         loadMembers();
     </script>
+
+    <script src="your_script.js"></script>
 </body>
 
 </html>
