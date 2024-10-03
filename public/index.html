@@ -50,24 +50,7 @@
             const data = await res.json();
             console.log('Raw Data:', JSON.stringify(data, null, 2));
             const membersList = document.getElementById('membersList');
-
-            // Sort members by first name
-            const sortedMembers = data.data.sort((a, b) => {
-                const firstNameA = a.attributes.first_name.toUpperCase(); // ignore upper and lowercase
-                const firstNameB = b.attributes.first_name.toUpperCase(); // ignore upper and lowercase
-                if (firstNameA < firstNameB) {
-                    return -1;
-                }
-                if (firstNameA > firstNameB) {
-                    return 1;
-                }
-
-                // Names must be equal
-                return 0;
-            });
-
-            // Display sorted members
-            membersList.innerHTML = sortedMembers.map(member => `<li>${member.attributes.first_name} ${member.attributes.last_name}  -  ID: ${member.id}</li>`).join('');
+            membersList.innerHTML = data.data.map(member => `<li>${member.attributes.first_name} ${member.attributes.last_name}  -  ID: ${member.id} </li>`).join('');
         }
 
         loadMembers();
